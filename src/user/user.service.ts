@@ -39,7 +39,7 @@ export class UserService {
     }
 
     const userToken = this.authService.sign(
-      checkedUser.id.toString(),
+      { id: checkedUser.id, email: checkedUser.email, name: checkedUser.name },
       loginDto.keep,
     );
 
@@ -51,7 +51,9 @@ export class UserService {
       email: signUpDto.email,
     });
 
-    if (checkEmail) {
+    console.log(checkEmail);
+
+    if (checkEmail.length > 0) {
       throw new ConflictException();
     }
     const hashPassword = await hash(

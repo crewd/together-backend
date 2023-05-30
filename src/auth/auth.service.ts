@@ -8,9 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
-  sign(id: string, keep: boolean) {
+  sign(payload: { id: string; email: string; name: string }, keep: boolean) {
     try {
-      const token = this.jwtService.sign(id, !keep && { expiresIn: '1h' });
+      const token = keep
+        ? this.jwtService.sign(payload)
+        : this.jwtService.sign(payload, { expiresIn: '1h' });
       return token;
     } catch (err) {
       throw new BadRequestException(err.message);
