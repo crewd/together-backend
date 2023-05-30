@@ -1,11 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
 import { LoginResultDto } from './dto/login-result.dto';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { AuthService } from 'src/auth/auth.service';
+import { SignUpDto } from './dto/signUpDto.dto';
 
 @Injectable()
 export class UserService {
@@ -39,5 +44,26 @@ export class UserService {
     );
 
     return { token: userToken };
+  }
+
+  async signUp(signUpDto: SignUpDto): Promise<void> {
+    const checkEmail = await this.userRepository.find({
+      email: signUpDto.email,
+    });
+
+    if (checkEmail) {
+      throw new ConflictException();
+    }
+    const hashPassword = await hash(
+      signUpDto.password,
+      Number(process.env.SALT_ROUNDS),
+    );
+
+    const user = new User();
+    user.email = signUpDto.email;
+    user.name = signUpDto.name;
+    user.password = hashPassword;
+
+    await this.userRepository.save(user);
   }
 }
