@@ -23,7 +23,6 @@ export class AuthService {
     if (!token) {
       throw new UnauthorizedException();
     }
-
     try {
       const payload = this.jwtService.verify(token, {
         secret: process.env.SECRET_KEY,
