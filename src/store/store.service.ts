@@ -4,6 +4,8 @@ import { Store } from './store.entity';
 import { Repository } from 'typeorm';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { User } from 'src/user/user.entity';
+import { Role } from 'src/role/role.entity';
+import { Roles } from 'src/role/role.enum';
 
 @Injectable()
 export class StoreService {
@@ -13,6 +15,9 @@ export class StoreService {
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
   ) {}
 
   async createStore(createStoreDto: CreateStoreDto, userId: number) {
@@ -29,5 +34,16 @@ export class StoreService {
     store.userId = user.id;
     store.startTime = createStoreDto.startTime;
     store.endTime = createStoreDto.endTime;
+
+    const savedStore = await this.storeRepository.save(store);
+
+    const role = new Role();
+    role.name = Roles.OWNER;
+    role.user = user;
+    role.userId = user.id;
+    role.store = savedStore;
+    role.storeId = savedStore.id;
+
+    await this.roleRepository.save(role);
   }
 }

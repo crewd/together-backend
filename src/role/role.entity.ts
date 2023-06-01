@@ -17,6 +17,7 @@ export class Role {
   @Column({
     type: 'enum',
     enum: Roles,
+    default: Roles.PART_TIME,
   })
   name: Roles;
 
