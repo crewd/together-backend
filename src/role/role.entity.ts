@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Roles } from './role.enum';
+import { Permission, Roles } from './role.enum';
 
 @Entity()
 export class Role {
@@ -20,6 +20,13 @@ export class Role {
     default: Roles.PART_TIME,
   })
   name: Roles;
+
+  @Column({
+    type: 'enum',
+    enum: Permission,
+    default: Permission.EMPLOYEE,
+  })
+  permission: Permission;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })

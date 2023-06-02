@@ -4,3 +4,8 @@ export enum Roles {
   FULL_TIME = 'fullTime',
   PART_TIME = 'partTime',
 }
+
+export enum Permission {
+  ADMIN = 'admin',
+  EMPLOYEE = 'employee',
+}
