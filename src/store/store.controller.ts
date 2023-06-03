@@ -73,4 +73,20 @@ export class StoreController {
   ) {
     return this.storeService.editStore(storeId, userId, editStoreDto);
   }
+
+  @UseGuards(AuthGuard)
+  @Post('delete/:storeId')
+  @ApiOperation({
+    summary: '매장 제거',
+    description: '매장 제거 API',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundExecption' })
+  deleteStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+  ) {
+    return this.storeService.deleteStore(userId, storeId);
+  }
 }

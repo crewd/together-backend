@@ -93,6 +93,7 @@ export class StoreService {
     if (!user) {
       throw new NotFoundException();
     }
+
     const store = await this.storeRepository.findOne({ id: storeId });
 
     if (!store) {
@@ -109,5 +110,25 @@ export class StoreService {
     store.endTime = editStoreDto.endTime;
 
     await this.storeRepository.save(store);
+  }
+
+  async deleteStore(userId: number, storeId: number) {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({ id: storeId });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    if (userId !== store.userId) {
+      throw new UnauthorizedException();
+    }
+
+    await this.storeRepository.delete({ id: storeId });
   }
 }
