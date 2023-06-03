@@ -29,7 +29,9 @@ export class StoreService {
   ) {}
 
   async storeList(userId: number, permission: string): Promise<StoreDto[]> {
-    if (!userId) {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
       throw new NotFoundException();
     }
 
