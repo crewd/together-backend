@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -58,7 +60,7 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('edit/:storeId')
+  @Patch('edit/:storeId')
   @ApiOperation({
     summary: '매장 정보 수정',
     description: '매장 정보 수정 API',
@@ -75,7 +77,7 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('delete/:storeId')
+  @Delete('delete/:storeId')
   @ApiOperation({
     summary: '매장 제거',
     description: '매장 제거 API',
