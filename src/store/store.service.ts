@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './store.entity';
@@ -12,6 +13,7 @@ import { Role } from 'src/role/role.entity';
 import { Permission, Roles } from 'src/role/role.enum';
 import { plainToInstance } from 'class-transformer';
 import { StoreDto } from './dto/store.dto';
+import { EditStoreDto } from './dto/edit-store.dto';
 
 @Injectable()
 export class StoreService {
@@ -79,5 +81,33 @@ export class StoreService {
     role.storeId = savedStore.id;
 
     await this.roleRepository.save(role);
+  }
+
+  async editStore(
+    storeId: number,
+    userId: number,
+    editStoreDto: EditStoreDto,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+    const store = await this.storeRepository.findOne({ id: storeId });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    if (userId !== store.userId) {
+      throw new UnauthorizedException();
+    }
+
+    store.name = editStoreDto.name;
+    store.address = editStoreDto.address;
+    store.startTime = editStoreDto.startTime;
+    store.endTime = editStoreDto.endTime;
+
+    await this.storeRepository.save(store);
   }
 }

@@ -17,6 +17,7 @@ import {
 import { User } from 'src/user/user.decorator';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { EditStoreDto } from './dto/edit-store.dto';
 
 @ApiTags('Store API')
 @Controller('store')
@@ -54,5 +55,22 @@ export class StoreController {
     @Body() createStoreDto: CreateStoreDto,
   ) {
     return this.storeService.createStore(createStoreDto, userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('edit/:storeId')
+  @ApiOperation({
+    summary: '매장 정보 수정',
+    description: '매장 정보 수정 API',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundExecption' })
+  editStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Body() editStoreDto: EditStoreDto,
+  ) {
+    return this.storeService.editStore(storeId, userId, editStoreDto);
   }
 }
