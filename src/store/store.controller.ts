@@ -44,6 +44,22 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('list/:storeId')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '매장 상세 조회',
+    description: '매장 상세 조회 API',
+  })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundException' })
+  detailStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+  ) {
+    return this.storeService.detailStore(userId, storeId);
+  }
+
+  @UseGuards(AuthGuard)
   @Post('create')
   @ApiOperation({
     summary: '매장 생성',

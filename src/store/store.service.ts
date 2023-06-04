@@ -57,6 +57,28 @@ export class StoreService {
     return stores;
   }
 
+  async detailStore(userId: number, storeId: number) {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({ id: storeId });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    if (user.id !== store.userId) {
+      throw new UnauthorizedException();
+    }
+
+    const storeData = plainToInstance(StoreDto, store);
+
+    return storeData;
+  }
+
   async createStore(createStoreDto: CreateStoreDto, userId: number) {
     const user = await this.userRepository.findOne({ id: userId });
 
