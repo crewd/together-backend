@@ -1,15 +1,22 @@
-import { IsNumber, IsString } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
+@Exclude()
 export class NoticeDto {
-  @IsNumber()
+  @Expose()
   id: number;
 
-  @IsString()
+  @Expose()
   title: string;
 
-  @IsString()
+  @Expose()
   content: string;
 
-  @IsString()
+  @Expose()
   wirter: string;
+
+  @Expose()
+  createdTime: Date;
+
+  @Expose()
+  updatedTime: Date;
 }

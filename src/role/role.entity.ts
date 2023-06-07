@@ -2,10 +2,12 @@ import { Store } from 'src/store/store.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Permission, Roles } from './role.enum';
 
@@ -41,4 +43,10 @@ export class Role {
 
   @Column()
   storeId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

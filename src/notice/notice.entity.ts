@@ -2,10 +2,12 @@ import { Store } from 'src/store/store.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -35,4 +37,10 @@ export class Notice {
 
   @Column()
   writer: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

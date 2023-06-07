@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notice } from './notice.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +11,8 @@ import { User } from 'src/user/user.entity';
 import { Role } from 'src/role/role.entity';
 import { plainToInstance } from 'class-transformer';
 import { NoticeDto } from './dto/notice.dto';
+import { Permission } from 'src/role/role.enum';
+import { CreateNoticetDto } from './dto/create-notice.dto';
 
 @Injectable()
 export class NoticeService {
@@ -49,5 +55,46 @@ export class NoticeService {
     const noticeList = plainToInstance(NoticeDto, notices);
 
     return noticeList;
+  }
+
+  async createNotice(
+    userId: number,
+    storeId: number,
+    createNoticeDto: CreateNoticetDto,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({
+      id: storeId,
+      userId: userId,
+    });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    const role = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (role.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    const notice = new Notice();
+    notice.title = createNoticeDto.title;
+    notice.content = createNoticeDto.content;
+    notice.user = user;
+    notice.userId = user.id;
+    notice.store = store;
+    notice.storeId = store.id;
+    notice.writer = user.name;
+
+    await this.noticeRepository.save(notice);
   }
 }
