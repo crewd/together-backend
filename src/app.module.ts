@@ -5,6 +5,8 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { StoreModule } from './store/store.module';
+import { RoleModule } from './role/role.module';
+import { NoticeModule } from './notice/notice.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { StoreModule } from './store/store.module';
     }),
     UserModule,
     StoreModule,
+    RoleModule,
+    NoticeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
