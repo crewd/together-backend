@@ -24,8 +24,8 @@ export class NoticeController {
   @Get('store/:storeId/notice')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '매장 목록 조회',
-    description: '매장 목록 조회 API',
+    summary: '공지사항 목록 조회',
+    description: '공지사항 목록 조회 API',
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   @ApiResponse({ status: 404, description: 'NotFoundException' })
