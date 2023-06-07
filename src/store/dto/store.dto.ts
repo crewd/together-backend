@@ -1,18 +1,19 @@
-import { IsNumber, IsString } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
+@Exclude()
 export class StoreDto {
-  @IsNumber()
+  @Expose()
   id: number;
 
-  @IsString()
+  @Expose()
   name: string;
 
-  @IsString()
+  @Expose()
   address: string;
 
-  @IsString()
+  @Expose()
   startTime: string;
 
-  @IsString()
+  @Expose()
   endTime: string;
 }
