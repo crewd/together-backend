@@ -1,14 +1,12 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notice } from './notice.entity';
 import { Repository } from 'typeorm';
 import { Store } from 'src/store/store.entity';
 import { User } from 'src/user/user.entity';
 import { Role } from 'src/role/role.entity';
+import { plainToInstance } from 'class-transformer';
+import { NoticeDto } from './dto/notice.dto';
 
 @Injectable()
 export class NoticeService {
@@ -26,7 +24,7 @@ export class NoticeService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async noticeList(userId: number, storeId: number) {
+  async getNoticeList(userId: number, storeId: number): Promise<NoticeDto[]> {
     const user = await this.userRepository.findOne({ id: userId });
 
     if (!user) {
@@ -47,5 +45,9 @@ export class NoticeService {
     if (!notices) {
       throw new NotFoundException();
     }
+
+    const noticeList = plainToInstance(NoticeDto, notices);
+
+    return noticeList;
   }
 }
