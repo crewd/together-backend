@@ -13,6 +13,7 @@ import { plainToInstance } from 'class-transformer';
 import { NoticeDto } from './dto/notice.dto';
 import { Permission } from 'src/role/role.enum';
 import { CreateNoticetDto } from './dto/create-notice.dto';
+import { EditNoticetDto } from './dto/edit-notice.dto';
 
 @Injectable()
 export class NoticeService {
@@ -94,6 +95,43 @@ export class NoticeService {
     notice.store = store;
     notice.storeId = store.id;
     notice.writer = user.name;
+
+    await this.noticeRepository.save(notice);
+  }
+
+  async editNotice(
+    userId: number,
+    storeId: number,
+    noticeId: number,
+    editNoticeDto: EditNoticetDto,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const userRole = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (!userRole) {
+      throw new NotFoundException();
+    }
+
+    if (userRole.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    const notice = await this.noticeRepository.findOne({ id: noticeId });
+
+    if (!notice) {
+      throw new NotFoundException();
+    }
+
+    notice.title = editNoticeDto.title;
+    notice.content = editNoticeDto.content;
 
     await this.noticeRepository.save(notice);
   }

@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { NoticeService } from './notice.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.decorator';
 import { CreateNoticetDto } from './dto/create-notice.dto';
+import { EditNoticetDto } from './dto/edit-notice.dto';
 
 @ApiTags('notice')
 @Controller()
@@ -54,5 +56,28 @@ export class NoticeController {
     @Body() createNoticeDto: CreateNoticetDto,
   ) {
     return this.noticeService.createNotice(userId, storeId, createNoticeDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('store/:storeId/notice/:noticeId/edit')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '공지사항 생성',
+    description: '공지사항 생성 API',
+  })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundException' })
+  editNotice(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('noticeId', ParseIntPipe) noticeId: number,
+    @Body() editNoticeDto: EditNoticetDto,
+  ) {
+    return this.noticeService.editNotice(
+      userId,
+      storeId,
+      noticeId,
+      editNoticeDto,
+    );
   }
 }
