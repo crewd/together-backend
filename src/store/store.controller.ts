@@ -44,7 +44,7 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('list/:storeId')
+  @Get('store/:storeId')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '매장 상세 조회',
@@ -76,7 +76,7 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
-  @Patch('edit/:storeId')
+  @Patch(':storeId/edit')
   @ApiOperation({
     summary: '매장 정보 수정',
     description: '매장 정보 수정 API',
@@ -93,7 +93,7 @@ export class StoreController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete('delete/:storeId')
+  @Delete(':storeId/delete')
   @ApiOperation({
     summary: '매장 제거',
     description: '매장 제거 API',
