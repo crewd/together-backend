@@ -135,4 +135,37 @@ export class NoticeService {
 
     await this.noticeRepository.save(notice);
   }
+
+  async deleteNotice(
+    userId: number,
+    storeId: number,
+    noticeId: number,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const userRole = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (!userRole) {
+      throw new NotFoundException();
+    }
+
+    if (userRole.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    const notice = await this.noticeRepository.findOne({ id: noticeId });
+
+    if (!notice) {
+      throw new NotFoundException();
+    }
+
+    await this.noticeRepository.delete({ id: noticeId });
+  }
 }

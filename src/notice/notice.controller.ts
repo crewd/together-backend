@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -79,5 +80,22 @@ export class NoticeController {
       noticeId,
       editNoticeDto,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('store/:storeId/notice/:noticeId/delete')
+  @ApiOperation({
+    summary: '공지사항 제거',
+    description: '공지사항 제거 API',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundExecption' })
+  deleteStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('noticeId', ParseIntPipe) noticeId: number,
+  ) {
+    return this.noticeService.deleteNotice(userId, storeId, noticeId);
   }
 }
