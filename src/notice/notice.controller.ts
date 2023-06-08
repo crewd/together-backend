@@ -62,8 +62,8 @@ export class NoticeController {
   @Patch('store/:storeId/notice/:noticeId/edit')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '공지사항 생성',
-    description: '공지사항 생성 API',
+    summary: '공지사항 수정',
+    description: '공지사항 수정 API',
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   @ApiResponse({ status: 404, description: 'NotFoundException' })

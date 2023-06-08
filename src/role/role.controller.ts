@@ -26,8 +26,8 @@ export class RoleController {
   @Patch('role/:storeId')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '매장 목록 조회',
-    description: '매장 목록 조회 API',
+    summary: '권한 변경',
+    description: '권한 변경 API',
   })
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
