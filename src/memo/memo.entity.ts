@@ -32,14 +32,17 @@ export class Memo {
   @Column()
   wirter: string;
 
-  @Column()
+  @Column({ nullable: true })
   completer: string;
 
   @Column()
   content: string;
 
-  @Column()
+  @Column({ default: false })
   checked: boolean;
+
+  @Column()
+  date: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -10,6 +10,7 @@ import { User } from 'src/user/user.entity';
 import { Store } from 'src/store/store.entity';
 import { plainToInstance } from 'class-transformer';
 import { MemoDto } from './dto/memo.dto';
+import { CreateMemoDto } from './dto/create-memo.dto';
 
 @Injectable()
 export class MemoService {
@@ -44,5 +45,37 @@ export class MemoService {
     const memoList = plainToInstance(MemoDto, memos);
 
     return memoList;
+  }
+
+  async createMemo(
+    userId: number,
+    storeId: number,
+    createMemoDto: CreateMemoDto,
+  ) {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({
+      id: storeId,
+      userId: userId,
+    });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    const memo = new Memo();
+    memo.user = user;
+    memo.userId = user.id;
+    memo.store = store;
+    memo.storeId = store.id;
+    memo.content = createMemoDto.content;
+    memo.wirter = user.name;
+    memo.date = createMemoDto.date;
+
+    await this.memoRepository.save(memo);
   }
 }

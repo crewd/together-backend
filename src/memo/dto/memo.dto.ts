@@ -15,7 +15,7 @@ export class MemoDto {
   checked: boolean;
 
   @Expose()
-  completer: string;
+  completer: string | null;
 
   @Expose()
   createdTime: Date;
