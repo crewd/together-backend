@@ -43,8 +43,8 @@ export class MemoController {
   @Post('store/:storeId/memo/create')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '인수인계 목록 조회',
-    description: '인수인계 목록 조회 API',
+    summary: '인수인계 생성',
+    description: '인수인계 생성 API',
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   @ApiResponse({ status: 404, description: 'NotFoundException' })
