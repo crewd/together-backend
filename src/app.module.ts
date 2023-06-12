@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StoreModule } from './store/store.module';
 import { RoleModule } from './role/role.module';
 import { NoticeModule } from './notice/notice.module';
+import { MemoModule } from './memo/memo.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { NoticeModule } from './notice/notice.module';
     StoreModule,
     RoleModule,
     NoticeModule,
+    MemoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
