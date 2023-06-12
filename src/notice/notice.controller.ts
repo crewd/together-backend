@@ -43,7 +43,7 @@ export class NoticeController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('store/:storeId/notice/create')
+  @Post('store/:storeId/notice')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '공지사항 생성',
@@ -60,7 +60,7 @@ export class NoticeController {
   }
 
   @UseGuards(AuthGuard)
-  @Patch('store/:storeId/notice/:noticeId/edit')
+  @Patch('store/:storeId/notice/:noticeId')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '공지사항 수정',
@@ -83,7 +83,7 @@ export class NoticeController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete('store/:storeId/notice/:noticeId/delete')
+  @Delete('store/:storeId/notice/:noticeId')
   @ApiOperation({
     summary: '공지사항 제거',
     description: '공지사항 제거 API',

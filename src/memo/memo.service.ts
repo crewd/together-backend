@@ -12,6 +12,9 @@ import { Store } from 'src/store/store.entity';
 import { plainToInstance } from 'class-transformer';
 import { MemoDto } from './dto/memo.dto';
 import { CreateMemoDto } from './dto/create-memo.dto';
+import { EditMemoDto } from './dto/edit-memo.dto';
+import { Role } from 'src/role/role.entity';
+import { Permission } from 'src/role/role.enum';
 
 @Injectable()
 export class MemoService {
@@ -24,6 +27,9 @@ export class MemoService {
 
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
+
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
   ) {}
 
   async getMemoList(
@@ -94,6 +100,44 @@ export class MemoService {
     memo.wirter = user.name;
 
     memo.date = createMemoDto.date;
+
+    await this.memoRepository.save(memo);
+  }
+
+  async editMemo(
+    userId: number,
+    storeId: number,
+    memoId: number,
+    editMemoDto: EditMemoDto,
+  ) {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const role = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (!role) {
+      throw new NotFoundException();
+    }
+
+    if (!editMemoDto.checked && editMemoDto.completer) {
+      throw new BadRequestException();
+    }
+
+    const memo = await this.memoRepository.findOne({ id: memoId });
+
+    if (memo.userId !== user.id || role.permission === Permission.EMPLOYEE) {
+      throw new UnauthorizedException();
+    }
+
+    memo.content = editMemoDto.content;
+    memo.checked = editMemoDto.checked;
+    memo.completer = editMemoDto.completer;
 
     await this.memoRepository.save(memo);
   }

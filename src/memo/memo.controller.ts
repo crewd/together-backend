@@ -11,12 +11,14 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { User } from 'src/user/user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateMemoDto } from './dto/create-memo.dto';
+import { EditMemoDto } from './dto/edit-memo.dto';
 
 @ApiTags('인수인계')
 @Controller()
@@ -41,7 +43,7 @@ export class MemoController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('store/:storeId/memo/create')
+  @Post('store/:storeId/memo')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '인수인계 생성',
@@ -55,5 +57,23 @@ export class MemoController {
     @Body() createMemoDto: CreateMemoDto,
   ) {
     return this.memoService.createMemo(userId, storeId, createMemoDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('store/:storeId/memo/:memoId')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '인수인계 수정',
+    description: '인수인계 수정 API',
+  })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundException' })
+  editMemo(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('memoId', ParseIntPipe) memoId: number,
+    @Body() editMemoDto: EditMemoDto,
+  ) {
+    return this.memoService.editMemo(userId, storeId, memoId, editMemoDto);
   }
 }

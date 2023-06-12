@@ -5,19 +5,21 @@ export class EditMemoDto {
    * 수정할 인수인계의 내용
    * @example '오후 8시 저녁 예약 있습니다'
    */
-  @IsOptional()
   @IsString()
   content: string;
 
   /**
-   * 수정할 인수인계의 날짜
-   * @example '2023-06-12'
+   * 수정할 인수인계의 완료 여부
+   * @example true
    */
-  @IsOptional()
   @IsBoolean()
   checked: boolean;
 
+  /**
+   * 인수인계의 완료자
+   * @example '홍길동'
+   */
   @IsOptional()
   @IsString()
-  completer: string;
+  completer: string | null;
 }
