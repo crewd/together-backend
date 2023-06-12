@@ -25,7 +25,11 @@ export class MemoService {
     private storeRepository: Repository<Store>,
   ) {}
 
-  async getMemoList(userId: number, storeId: number): Promise<MemoDto[]> {
+  async getMemoList(
+    userId: number,
+    storeId: number,
+    date: string,
+  ): Promise<MemoDto[]> {
     const store = await this.storeRepository.find({
       id: storeId,
     });
@@ -40,7 +44,10 @@ export class MemoService {
       throw new UnauthorizedException();
     }
 
-    const memos = await this.memoRepository.find({ storeId: storeId });
+    const memos = await this.memoRepository.find({
+      storeId: storeId,
+      date: date,
+    });
 
     const memoList = plainToInstance(MemoDto, memos);
 

@@ -18,6 +18,9 @@ export class MemoDto {
   completer: string | null;
 
   @Expose()
+  date: string;
+
+  @Expose()
   createdTime: Date;
 
   @Expose()

@@ -24,7 +24,7 @@ export class MemoController {
   constructor(private memoService: MemoService) {}
 
   @UseGuards(AuthGuard)
-  @Get('store/:storeId/memo')
+  @Get('store/:storeId/memo/:date')
   @ApiBearerAuth()
   @ApiOperation({
     summary: '인수인계 목록 조회',
@@ -35,8 +35,9 @@ export class MemoController {
   getMemoList(
     @User('userId', ParseIntPipe) userId: number,
     @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('date') date: string,
   ) {
-    return this.memoService.getMemoList(userId, storeId);
+    return this.memoService.getMemoList(userId, storeId, date);
   }
 
   @UseGuards(AuthGuard)
