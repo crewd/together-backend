@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -74,6 +75,16 @@ export class MemoService {
       throw new NotFoundException();
     }
 
+    const year = new Date().getFullYear();
+    const month = String(new Date().getMonth() + 1).padStart(2, '0');
+    const day = String(new Date().getDate()).padStart(2, '0');
+
+    const today = `${year}-${month}-${day}`;
+
+    if (createMemoDto.date !== today) {
+      throw new BadRequestException();
+    }
+
     const memo = new Memo();
     memo.user = user;
     memo.userId = user.id;
@@ -81,6 +92,7 @@ export class MemoService {
     memo.storeId = store.id;
     memo.content = createMemoDto.content;
     memo.wirter = user.name;
+
     memo.date = createMemoDto.date;
 
     await this.memoRepository.save(memo);
