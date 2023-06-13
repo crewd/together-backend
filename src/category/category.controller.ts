@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -83,5 +84,22 @@ export class CategoryController {
       categoryId,
       editCategoryDto,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('store/:storeId/category/:categoryId')
+  @ApiOperation({
+    summary: '카테고리 제거',
+    description: '카테고리 제거 API',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundExecption' })
+  deleteStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return this.categoryService.deleteCategory(userId, storeId, categoryId);
   }
 }

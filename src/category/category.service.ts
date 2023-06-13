@@ -96,7 +96,7 @@ export class CategoryService {
     storeId: number,
     categoryId: number,
     editCategoryDto: EditCategorytDto,
-  ) {
+  ): Promise<void> {
     const role = await this.roleRepository.findOne({
       userId: userId,
       storeId: storeId,
@@ -119,5 +119,32 @@ export class CategoryService {
     category.name = editCategoryDto.name;
 
     await this.categoryRepository.save(category);
+  }
+
+  async deleteCategory(
+    userId: number,
+    storeId: number,
+    categoryId: number,
+  ): Promise<void> {
+    const role = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (role.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    const category = await this.categoryRepository.findOne({ id: categoryId });
+
+    if (!category) {
+      throw new NotFoundException();
+    }
+
+    if (category.storeId !== storeId) {
+      throw new UnauthorizedException();
+    }
+
+    await this.categoryRepository.delete(category);
   }
 }
