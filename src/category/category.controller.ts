@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { CategoryService } from './category.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.decorator';
 import { CreateCategorytDto } from './dto/create-category.dto';
+import { EditCategorytDto } from './dto/edit-category.dto';
 
 @ApiTags('category')
 @Controller()
@@ -57,6 +59,29 @@ export class CategoryController {
       userId,
       storeId,
       createCategoryDto,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('store/:storeId/category/:categoryId')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: '카테고리 수정',
+    description: '카테고리 수정 API',
+  })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundException' })
+  editNotice(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Body() editCategoryDto: EditCategorytDto,
+  ) {
+    return this.categoryService.editCategory(
+      userId,
+      storeId,
+      categoryId,
+      editCategoryDto,
     );
   }
 }

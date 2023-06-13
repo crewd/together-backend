@@ -13,6 +13,7 @@ import { CategoryDto } from './dto/category.dto';
 import { CreateCategorytDto } from './dto/create-category.dto';
 import { Role } from 'src/role/role.entity';
 import { Permission } from 'src/role/role.enum';
+import { EditCategorytDto } from './dto/edit-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -86,6 +87,36 @@ export class CategoryService {
     category.store = store;
     category.storeId = storeId;
     category.name = createCategoryDto.name;
+
+    await this.categoryRepository.save(category);
+  }
+
+  async editCategory(
+    userId: number,
+    storeId: number,
+    categoryId: number,
+    editCategoryDto: EditCategorytDto,
+  ) {
+    const role = await this.roleRepository.findOne({
+      userId: userId,
+      storeId: storeId,
+    });
+
+    if (role.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    const category = await this.categoryRepository.findOne({ id: categoryId });
+
+    if (!category) {
+      throw new NotFoundException();
+    }
+
+    if (category.storeId !== storeId) {
+      throw new UnauthorizedException();
+    }
+
+    category.name = editCategoryDto.name;
 
     await this.categoryRepository.save(category);
   }
