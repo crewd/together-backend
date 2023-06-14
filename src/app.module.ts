@@ -8,6 +8,7 @@ import { StoreModule } from './store/store.module';
 import { RoleModule } from './role/role.module';
 import { NoticeModule } from './notice/notice.module';
 import { MemoModule } from './memo/memo.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MemoModule } from './memo/memo.module';
     RoleModule,
     NoticeModule,
     MemoModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
