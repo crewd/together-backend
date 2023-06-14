@@ -6,10 +6,11 @@ import { Store } from 'src/store/store.entity';
 import { Role } from 'src/role/role.entity';
 import { User } from 'src/user/user.entity';
 import { WokrService } from './work.service';
+import { WorkController } from './work.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Work, Category, Store, User, Role])],
-  controllers: [],
+  controllers: [WorkController],
   providers: [WokrService],
 })
 export class WorkModule {}
