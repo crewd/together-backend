@@ -1,3 +1,4 @@
+import { Category } from 'src/category/category.entity';
 import { Store } from 'src/store/store.entity';
 import {
   Column,
@@ -10,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Category {
+export class Work {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,8 +22,18 @@ export class Category {
   @Column()
   storeId: number;
 
+  @ManyToOne(() => Category, (category) => category.id)
+  @JoinColumn({ name: 'categoryId', referencedColumnName: 'id' })
+  category: Category;
+
   @Column()
-  name: string;
+  categoryId: number;
+
+  @Column()
+  title: string;
+
+  @Column()
+  content: string;
 
   @CreateDateColumn()
   createdAt: Date;
