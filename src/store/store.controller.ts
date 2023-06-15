@@ -23,10 +23,10 @@ import { EditStoreDto } from './dto/edit-store.dto';
 
 @ApiTags('Store API')
 @Controller('store')
+@UseGuards(AuthGuard)
 export class StoreController {
   constructor(private storeService: StoreService) {}
 
-  @UseGuards(AuthGuard)
   @Get('list/:permission')
   @ApiBearerAuth()
   @ApiOperation({
@@ -43,7 +43,6 @@ export class StoreController {
     return this.storeService.storeList(userId, permission);
   }
 
-  @UseGuards(AuthGuard)
   @Get('store/:storeId')
   @ApiBearerAuth()
   @ApiOperation({
@@ -59,7 +58,6 @@ export class StoreController {
     return this.storeService.detailStore(userId, storeId);
   }
 
-  @UseGuards(AuthGuard)
   @Post('create')
   @ApiOperation({
     summary: '매장 생성',
@@ -75,7 +73,6 @@ export class StoreController {
     return this.storeService.createStore(createStoreDto, userId);
   }
 
-  @UseGuards(AuthGuard)
   @Patch(':storeId/edit')
   @ApiOperation({
     summary: '매장 정보 수정',
@@ -92,7 +89,6 @@ export class StoreController {
     return this.storeService.editStore(storeId, userId, editStoreDto);
   }
 
-  @UseGuards(AuthGuard)
   @Delete(':storeId/delete')
   @ApiOperation({
     summary: '매장 제거',

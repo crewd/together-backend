@@ -23,10 +23,10 @@ import { EditNoticetDto } from './dto/edit-notice.dto';
 
 @ApiTags('notice')
 @Controller()
+@UseGuards(AuthGuard)
 export class NoticeController {
   constructor(private noticeService: NoticeService) {}
 
-  @UseGuards(AuthGuard)
   @Get('store/:storeId/notice')
   @ApiBearerAuth()
   @ApiOperation({
@@ -42,7 +42,6 @@ export class NoticeController {
     return this.noticeService.getNoticeList(userId, storeId);
   }
 
-  @UseGuards(AuthGuard)
   @Post('store/:storeId/notice')
   @ApiBearerAuth()
   @ApiOperation({
@@ -59,7 +58,6 @@ export class NoticeController {
     return this.noticeService.createNotice(userId, storeId, createNoticeDto);
   }
 
-  @UseGuards(AuthGuard)
   @Patch('store/:storeId/notice/:noticeId')
   @ApiBearerAuth()
   @ApiOperation({
@@ -82,7 +80,6 @@ export class NoticeController {
     );
   }
 
-  @UseGuards(AuthGuard)
   @Delete('store/:storeId/notice/:noticeId')
   @ApiOperation({
     summary: '공지사항 제거',

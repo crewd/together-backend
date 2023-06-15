@@ -19,10 +19,10 @@ import { ChangeRoleDto } from './dto/change-role.dto';
 
 @ApiTags('Role API')
 @Controller('role')
+@UseGuards(AuthGuard)
 export class RoleController {
   constructor(private roleService: RoleService) {}
 
-  @UseGuards(AuthGuard)
   @Patch('role/:storeId')
   @ApiBearerAuth()
   @ApiOperation({

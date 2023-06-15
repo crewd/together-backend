@@ -22,11 +22,11 @@ import { CreateCategorytDto } from './dto/create-category.dto';
 import { EditCategorytDto } from './dto/edit-category.dto';
 
 @ApiTags('category')
+@UseGuards(AuthGuard)
 @Controller()
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 
-  @UseGuards(AuthGuard)
   @Get('store/:storeId/category')
   @ApiBearerAuth()
   @ApiOperation({
@@ -42,7 +42,6 @@ export class CategoryController {
     return this.categoryService.getCategoryList(userId, storeId);
   }
 
-  @UseGuards(AuthGuard)
   @Post('store/:storeId/category')
   @ApiBearerAuth()
   @ApiOperation({
@@ -63,7 +62,6 @@ export class CategoryController {
     );
   }
 
-  @UseGuards(AuthGuard)
   @Patch('store/:storeId/category/:categoryId')
   @ApiBearerAuth()
   @ApiOperation({
@@ -86,7 +84,6 @@ export class CategoryController {
     );
   }
 
-  @UseGuards(AuthGuard)
   @Delete('store/:storeId/category/:categoryId')
   @ApiOperation({
     summary: '카테고리 제거',
