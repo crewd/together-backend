@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Store } from 'src/store/store.entity';
 import { plainToInstance } from 'class-transformer';
 import { WorkDto } from './dto/work.dto';
+import { Category } from 'src/category/category.entity';
 
 @Injectable()
 export class WokrService {
@@ -14,9 +15,17 @@ export class WokrService {
 
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
+
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async getWorkList(categoryId: number): Promise<WorkDto[]> {
+    const category = await this.categoryRepository.findOne({ id: categoryId });
+
+    if (!category) {
+      throw new NotFoundException();
+    }
     const works = await this.workRepository.find({
       categoryId: categoryId,
     });
