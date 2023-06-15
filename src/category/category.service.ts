@@ -31,19 +31,9 @@ export class CategoryService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async getCategoryList(
-    userId: number,
-    storeId: number,
-  ): Promise<CategoryDto[]> {
-    const user = await this.userRepository.findOne({ id: userId });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
+  async getCategoryList(storeId: number): Promise<CategoryDto[]> {
     const store = await this.storeRepository.findOne({
       id: storeId,
-      userId: userId,
     });
 
     if (!store) {
