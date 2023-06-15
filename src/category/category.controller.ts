@@ -35,8 +35,11 @@ export class CategoryController {
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   @ApiResponse({ status: 404, description: 'NotFoundException' })
-  getCategoryList(@Param('storeId', ParseIntPipe) storeId: number) {
-    return this.categoryService.getCategoryList(storeId);
+  getCategoryList(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+  ) {
+    return this.categoryService.getCategoryList(userId, storeId);
   }
 
   @UseGuards(AuthGuard)

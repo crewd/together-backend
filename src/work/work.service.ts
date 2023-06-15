@@ -6,12 +6,16 @@ import { Store } from 'src/store/store.entity';
 import { plainToInstance } from 'class-transformer';
 import { WorkDto } from './dto/work.dto';
 import { Category } from 'src/category/category.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class WokrService {
   constructor(
     @InjectRepository(Work)
     private workRepository: Repository<Work>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
 
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
@@ -20,12 +24,35 @@ export class WokrService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async getWorkList(categoryId: number): Promise<WorkDto[]> {
-    const category = await this.categoryRepository.findOne({ id: categoryId });
+  async getWorkList(
+    userId: number,
+    storeId: number,
+    categoryId: number,
+  ): Promise<WorkDto[]> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({
+      id: storeId,
+      userId: userId,
+    });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    const category = await this.categoryRepository.findOne({
+      id: categoryId,
+      storeId: storeId,
+    });
 
     if (!category) {
       throw new NotFoundException();
     }
+
     const works = await this.workRepository.find({
       categoryId: categoryId,
     });
