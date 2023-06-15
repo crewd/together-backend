@@ -9,6 +9,7 @@ import { RoleModule } from './role/role.module';
 import { NoticeModule } from './notice/notice.module';
 import { MemoModule } from './memo/memo.module';
 import { CategoryModule } from './category/category.module';
+import { WorkModule } from './work/work.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CategoryModule } from './category/category.module';
     NoticeModule,
     MemoModule,
     CategoryModule,
+    WorkModule,
   ],
   controllers: [AppController],
   providers: [AppService],
