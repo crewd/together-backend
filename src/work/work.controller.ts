@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -61,5 +62,21 @@ export class WorkController {
       categoryId,
       createWorkDto,
     );
+  }
+
+  @Delete('store/:storeId/work/:workId')
+  @ApiOperation({
+    summary: '업무 제거',
+    description: '업무 제거 API',
+  })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
+  @ApiResponse({ status: 404, description: 'NotFoundExecption' })
+  deleteStore(
+    @User('userId', ParseIntPipe) userId: number,
+    @Param('storeId', ParseIntPipe) storeId: number,
+    @Param('workId', ParseIntPipe) workId: number,
+  ) {
+    return this.workService.deleteWork(userId, storeId, workId);
   }
 }
