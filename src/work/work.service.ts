@@ -15,6 +15,7 @@ import { User } from 'src/user/user.entity';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { Role } from 'src/role/role.entity';
 import { Permission } from 'src/role/role.enum';
+import { EditWorkDto } from './dto/edit-work.dto';
 
 @Injectable()
 export class WokrService {
@@ -116,7 +117,54 @@ export class WokrService {
     await this.workRepository.save(work);
   }
 
-  async deleteWork(userId: number, storeId: number, workId: number) {
+  async editWork(
+    userId: number,
+    storeId: number,
+    workId: number,
+    editWorkDto: EditWorkDto,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const store = await this.storeRepository.findOne({
+      id: storeId,
+      userId: userId,
+    });
+
+    if (!store) {
+      throw new NotFoundException();
+    }
+
+    const work = await this.workRepository.findOne({ id: workId });
+
+    if (!work) {
+      throw new NotFoundException();
+    }
+
+    if (work.storeId !== storeId) {
+      throw new BadRequestException();
+    }
+
+    const userRole = await this.roleRepository.findOne({ userId, storeId });
+
+    if (userRole.permission !== Permission.ADMIN) {
+      throw new UnauthorizedException();
+    }
+
+    work.title = editWorkDto.title;
+    work.content = editWorkDto.content;
+
+    await this.workRepository.save(work);
+  }
+
+  async deleteWork(
+    userId: number,
+    storeId: number,
+    workId: number,
+  ): Promise<void> {
     const user = await this.userRepository.findOne({ id: userId });
 
     if (!user) {
