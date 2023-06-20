@@ -2,13 +2,13 @@
 
 <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white"> <img src="https://img.shields.io/badge/nestjs-E0234E?style=flat&logo=nestjs&logoColor=white"> <img src="https://img.shields.io/badge/TypeOrm-white?style=flat"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/TypeScript-3178c6?style=flat&logo=typescript&logoColor=white">
 
+> ### [Front-End](https://github.com/crewd/together-manager)
+
 ## 🔎 About
 
 매장 관리 웹서비스 투게더의 백엔드입니다.
 
 회원가입, 로그인, 매장 관리에 관한 기능들이 있습니다.
-
-> ### [Front-End](https://github.com/crewd/together-manager)
 
 ### ❗ 아직 개발이 진행 중인 프로젝트 입니다.
 
