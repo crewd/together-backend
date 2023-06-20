@@ -8,7 +8,9 @@
 
 회원가입, 로그인, 매장 관리에 관한 기능들이 있습니다.
 
-[Front-End](https://github.com/crewd/together-manager)
+> ### [Front-End](https://github.com/crewd/together-manager)
+
+### ❗ 아직 개발이 진행 중인 프로젝트 입니다.
 
 ## 설치
 
